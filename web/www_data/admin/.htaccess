@@ -1,0 +1,9 @@
+AddCharset UTF-8 .txt
+#<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /admin/index.php [L]
+#</IfModule>

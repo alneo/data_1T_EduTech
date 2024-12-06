@@ -1,0 +1,47 @@
+<h1 class="display-6">Предсказания модели</h1>
+<blockquote class="blockquote">
+    <p>Проверка(ручная) пользователя по user_id и недели по week в модели {$model_prognoz} (устанавливается в Настройках)</p>
+</blockquote>
+
+<form class="row g-3" method="post">
+    <div class="col-auto">
+        <label for="user_id">Пользователь(user_id)</label>
+        <input type="number" class="form-control" id="user_id" name="user_id" placeholder="19489">
+    </div>
+    <div class="col-auto">
+        <label for="week">Неделя(week)</label>
+        <select class="form-select" id="week" name="week">
+            <option value="1">1 неделя</option>
+            <option value="2">2 неделя</option>
+            <option value="3">3 неделя</option>
+            <option value="4">4 неделя</option>
+            <option value="5">5 неделя</option>
+            <option value="6">6 неделя</option>
+            <option value="7">7 неделя</option>
+            <option value="8">8 неделя</option>
+            <option value="9">9 неделя</option>
+            <option value="10">10 неделя</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        &nbsp;_<br>
+        <button type="submit" class="btn btn-primary mb-3" name="check">Проверить</button>
+    </div>
+</form>
+<hr>
+{if isset($param)&&count($param)}
+    <h3 class="display-6">Предсказания модели: неделя {$param.week} пользователь {$param.user_id}</h3>
+{if $param.rez.json.error==0}
+<p>Предсказание: <b>{$param.rez.json.result}</b></p>
+<p>Время SQL: <b>{$param.rez.json.time_sql}</b></p>
+<p>Время модели: <b>{$param.rez.json.time_model}</b></p>
+{else}
+<span style="color:red;">Ошибка!!!</span>
+{/if}
+<p>Информация работы скрипта:</p>
+<ul>
+{foreach from=$param.rez.json.logs item=log}
+    <li>{$log}</li>
+{/foreach}
+</ul>
+{/if}

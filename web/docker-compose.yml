@@ -1,0 +1,49 @@
+services:
+  web_nginx:
+    image: nginx
+    hostname: web_nginx
+    container_name: web_nginx
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    ports:
+      - 20002:80
+      - 20003:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/log:/var/log/nginx
+      - ./www_data:/usr/share/nginx/html
+
+  web_php:
+    build:
+      context: ./php/
+      args:
+        buildno: 2023101101
+    hostname: web_php
+    container_name: web_php
+    restart: unless-stopped
+    user: root
+    environment:
+      TZ: "Europe/Moscow"
+    volumes:
+      - ./www_data:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./php/log:/var/log/php
+
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    hostname: web_mysql
+    container_name: web_mysql
+    environment:
+      MYSQL_DATABASE: edutech
+      MYSQL_ROOT_PASSWORD: ${mysql_root_password}
+      MYSQL_USER: edutech_user
+      MYSQL_PASSWORD: ${mysql_user_password}
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql/db:/var/lib/mysql

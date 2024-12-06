@@ -1,0 +1,351 @@
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<div class="row">
+  <div class="col-md-10"></div>
+  <div class="col-md-2">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="filterBtn"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Фильтрация
+    </button>
+
+    <div class="dropdown-menu" aria-labelledby="filterBtn">
+      <form method="post">
+        <div class="accordion" id="courseAccordeon">
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                Курс
+              </button>
+            </div>
+
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse"
+              data-bs-parent="#courseAccordeon"
+            >
+              {foreach from=$courses key=kurs_id item=name}
+              <div>
+                <input class="form-check-input" type="checkbox"
+                value="{$kurs_id}" id="checbox_{$kurs_id}" name="filter_kurs[]"
+                {if
+                isset($filter.filter_kurs)&&in_array($kurs_id,$filter.filter_kurs)}checked="checked"{/if}
+                />
+                <label class="form-check-label" for="checbox_{$kurs_id}">
+                  {$name}
+                </label>
+              </div>
+              {/foreach}
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                Статус
+              </button>
+            </div>
+
+            <div
+              id="collapseTwo"
+              class="accordion-collapse collapse"
+              data-bs-parent="#courseAccordeon"
+            >
+              <div>
+                <input class="form-check-input" type="checkbox" value="2"
+                id="checbox_status1" name="filter_status[]" {if
+                isset($filter.filter_status)&&in_array(2,$filter.filter_status)}checked="checked"{/if}
+                />
+                <label class="form-check-label" for="checbox_status1">
+                  Активные
+                </label>
+              </div>
+
+              <div>
+                <input class="form-check-input" type="checkbox" value="1"
+                id="checbox_status2" name="filter_status[]" {if
+                isset($filter.filter_status)&&in_array(1,$filter.filter_status)}checked="checked"{/if}
+                />
+                <label class="form-check-label" for="checbox_status2">
+                  Засыпающие
+                </label>
+              </div>
+
+              <div>
+                <input class="form-check-input" type="checkbox" value="0"
+                id="checbox_status3" name="filter_status[]" {if
+                isset($filter.filter_status)&&in_array(0,$filter.filter_status)}checked="checked"{/if}
+                />
+                <label class="form-check-label" for="checbox_status3">
+                  Уснувшие
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="range_pa_state_sele">
+            <div class="row">
+              <div class="col-12">Вероятность смены статуса</div>
+
+              <div class="col-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="range_pa_state_input_1"
+                  value="{if isset($filter.filter_pa_status_start)}{$filter.filter_pa_status_start}{else}-50{/if}"
+                  placeholder="-100%"
+                  name="filter_pa_status_start"
+                  disabled
+                />
+              </div>
+
+              <div class="col-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="range_pa_state_input_2"
+                  value="{if isset($filter.filter_pa_status_end)}{$filter.filter_pa_status_end}{else}80{/if}"
+                  placeholder="100%"
+                  name="filter_pa_status_end"
+                  disabled
+                />
+              </div>
+
+              <div class="col-12">
+                <input
+                  type="range"
+                  class="form-range"
+                  id="range_pa_state_sele_1"
+                  value="-{if isset($filter.filter_pa_status_start)}{$filter.filter_pa_status_start}{else}50{/if}"
+                  style="width: 50%; float: left"
+                  disabled
+                />
+
+                <input
+                  type="range"
+                  class="form-range"
+                  id="range_pa_state_sele_2"
+                  value="{if isset($filter.filter_pa_status_end)}{$filter.filter_pa_status_end}{else}80{/if}"
+                  style="width: 50%"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="range_pa_kurs_sele">
+            <div class="row">
+              <div class="col-12">Вероятность завершения курса</div>
+
+              <div class="col-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="range_pa_kurs_input_1"
+                  value="{if isset($filter.filter_pa_kurs_start)}{$filter.filter_pa_kurs_start}{else}0{/if}"
+                  placeholder="-100%"
+                  name="filter_pa_kurs_start"
+                />
+              </div>
+
+              <div class="col-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="range_pa_kurs_input_2"
+                  value="{if isset($filter.filter_pa_kurs_end)}{$filter.filter_pa_kurs_end}{else}60{/if}"
+                  placeholder="100%"
+                  name="filter_pa_kurs_end"
+                />
+              </div>
+
+              <div class="col-12">
+                <input
+                  type="range"
+                  class="form-range"
+                  id="range_pa_kurs_sele_1"
+                  value="{if isset($filter.filter_pa_kurs_start)}{$filter.filter_pa_kurs_start}{else}0{/if}"
+                  style="width: 50%; float: left"
+                />
+
+                <input
+                  type="range"
+                  class="form-range"
+                  id="range_pa_kurs_sele_2"
+                  value="{if isset($filter.filter_pa_kurs_end)}{$filter.filter_pa_kurs_end}{else}60{/if}"
+                  style="width: 50%"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="label">Вывести данные за:</div>
+        <input
+          name="filter_date"
+          type="date"
+          class="form-control datepicker"
+          id="date_cur"
+          value="{if isset($filter.filter_date)}{$filter.filter_date}{else}{date('d.m.Y')}{/if}"
+          placeholder="дата отображения"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Выберите дату для отображения состояния данных"
+          autocomplete="false"
+          style="margin: 8px; width: 93%"
+        />
+        <div class="row">
+          <div class="col-md-6" style="text-align: center; padding: 10px">
+            <input
+              type="submit"
+              class="btn btn-secondary"
+              name="filter_clear"
+              value="Сбросить"
+            />
+          </div>
+          <div class="col-md-6" style="text-align: center; padding: 10px">
+            <input
+              type="submit"
+              class="btn btn-success"
+              name="filter_do"
+              value="Применить"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-md-4" style="display: none">
+    <form method="post">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          name="fio"
+          value=""
+          placeholder="Поиск по ФИО"
+        />
+        <input type="submit" name="search" value="Найти" class="btn btn-info" />
+      </div>
+    </form>
+  </div>
+
+  {literal}
+  <style>
+    .dropdown-menu {
+      padding: 0px !important;
+    }
+    .range_pa_state {
+      position: relative;
+      cursor: pointer;
+    }
+    .range_pa_state_sele {
+      padding: 10px;
+      width: 260px;
+    }
+    .range_pa_kurs {
+      position: relative;
+      cursor: pointer;
+    }
+    .accordion-button {
+      border: none !important;
+    }
+    .accordion-collapse {
+      padding: 8px;
+      border: none !important;
+    }
+    .range_pa_kurs_sele {
+      padding: 10px;
+      width: 260px;
+    }
+    .label {
+      margin-left: 8px;
+    }
+  </style>
+  <script>
+    $(document).ready(function () {
+      $(".accordion-header").on("click", function (event) {
+        event.stopPropagation();
+      });
+      $("#range_pa_state_sele_1").click(function () {
+        let val = $(this).val();
+        $("#range_pa_state_input_1").val(-1 * val);
+        range_pa_state();
+      });
+      $("#range_pa_state_sele_2").change(function () {
+        let val = $(this).val();
+        $("#range_pa_state_input_2").val(val);
+        range_pa_state();
+      });
+      $(".range_pa_state").click(function () {
+        $(".range_pa_state_sele").toggle();
+      });
+      $(".range_pa_state_close").click(function () {
+        range_pa_state();
+        $(".range_pa_state_sele").hide();
+      });
+      function range_pa_state() {
+        let v1 = $("#range_pa_state_input_1").val();
+        let v2 = $("#range_pa_state_input_2").val();
+        $(".range_pa_state_text span").text(v1 + " - " + v2);
+      }
+      $("#range_pa_kurs_sele_1").click(function () {
+        let val = $(this).val();
+        $("#range_pa_kurs_input_1").val(val);
+        range_pa_kurs();
+      });
+      $("#range_pa_kurs_sele_2").change(function () {
+        let val = $(this).val();
+        $("#range_pa_kurs_input_2").val(val);
+        range_pa_kurs();
+      });
+      $(".range_pa_kurs").click(function () {
+        $(".range_pa_kurs_sele").toggle();
+      });
+      function range_pa_kurs() {
+        let v1 = $("#range_pa_kurs_input_1").val();
+        let v2 = $("#range_pa_kurs_input_2").val();
+        $(".range_pa_kurs_text span").text(v1 + " - " + v2);
+      }
+
+      $(".select2_kurs").select2({ placeholder: "Выберите курс" });
+      $(".select2_status").select2({ placeholder: "Выберите статус" });
+      $("#date_cur").change(function () {
+        let date = $(this).val();
+        $.ajax({
+          type: "POST",
+          url: "/admin/students/",
+          data: "ajdes=date_cur_change&date=" + date,
+          dataType: "json",
+          encode: true,
+        }).done(function (data) {
+          //location.reload();
+        });
+      });
+    });
+  </script>
+  {/literal}
+</div>

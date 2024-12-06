@@ -1,0 +1,136 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="row">
+    <div class="col-md-5" style="padding-top: 20px;">
+        <h1 class="display-5">Статистика по курсам</h1>
+    </div>
+    <form method="post" style="display: contents;">
+    <div class="col-md-3 dt_range" style="padding-top:20px;">
+        <div>
+            <b>Период</b>
+        </div>
+        <div class="input-daterange input-group" id="datepicker">
+            <input type="text" class="input-sm form-control" name="range_start" autocomplete="false" value="{date('d.m.Y',$range.start)}"/>
+            <span class="input-group-addon" style="margin-right: 2px;">-</span>
+            <input type="text" class="input-sm form-control" name="range_end" autocomplete="false" value="{date('d.m.Y',$range.end)}"/>
+        </div>
+    </div>
+    
+    <div class="col-md-2" style="padding-top:20px; padding-left: 20px;">
+        <div>
+            <b>Курс</b>
+        </div>
+        <select class="form-select" name="course_id">
+            {foreach from=$courses item=name key=course_id}
+            <option value="{$course_id}" {if $course_id==$range.course_sel}SELECTED{/if}>{$name}</option>
+            {/foreach}
+        </select>
+    </div>
+    <div class="col-md-2" style="padding-top:40px; padding-left: 20px;">
+        <input type="submit" class="btn btn-success" name="range_set" value="показать" />
+    </div>
+    </form>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        <p><b>Динамика по статусам.</b> <a href="#" class="link-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="График  показывает изменения в количестве студентов в категориях 'активные', 'засыпающие', 'спящие' за выбранный период"><i class="bi bi-question-circle"></i></a></p>
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="glu0" style="width:100%; height:382px;"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx_0 = document.getElementById('glu0');
+            new Chart(ctx_0, {
+                data: {
+                    labels: ['{/literal}{date("d.m.Y",$range.start)}{literal}','{/literal}{date("d.m.Y",$range.end)}{literal}'],
+                        datasets: [
+                        {type:'bar',label:'Активные',borderWidth: 1,data: [{/literal}{$info.glu0[0].first_period},{$info.glu0[0].second_period}{literal}]},
+                        {type:'bar',label:'Засыпающие',borderWidth: 1,data: [{/literal}{$info.glu0[1].first_period},{$info.glu0[1].second_period}{literal}]},
+                        {type:'bar',label:'Спящие',borderWidth: 1,data: [{/literal}{$info.glu0[2].first_period},{$info.glu0[2].second_period}{literal}]}
+                        ]
+                },options: { scales: { y: { beginAtZero: true } }, responsive: true }
+            });
+        </script>{/literal}
+    </div>
+    <div class="col-md-6">
+        <p><b>Среднее время на платформе.</b> <a href="#" class="link-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="График отображает среднее время, проведенное студентами на платформе по дням. Это поможет проанализировать, насколько активно студенты взаимодействуют с материалами."><i class="bi bi-question-circle"></i></a></p>
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="inga1" style="width:100%; height:382px;"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx_20 = document.getElementById('inga1');
+            new Chart(ctx_20, {
+                data: { labels: [{/literal}{$info.inga1.labels}{literal}],datasets: [
+                    {type:'line',label:['Просмотренные активности'],    borderWidth: 1, data: [{/literal}{$info.inga1.values}{literal}]}
+                ]},options: { scales: { y: { beginAtZero: true } }, responsive: true, backgroundColor: 'rgba(66,127,246,0.7)', fill: true }
+            });
+        </script>{/literal}
+    </div>
+    <div class="col-md-6">
+        <p><b>Вероятность завершения курса.</b> <a href="#" class="link-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Линейный график, показывающий изменение вероятности завершения курса."><i class="bi bi-question-circle"></i></a></p>
+        <div style="margin-top:30px;padding-top:180px;width:100%;height:360px;background-color: #b6b7b7;text-align: center; vertical-align: middle;color: white;">в разработке</div>
+    </div>
+    <div class="col-md-6">
+        <p><b>Переходы между статусами.</b> <a href="#" class="link-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Диаграмма, показывающая, сколько студентов переходит из одной когорты в другую."><i class="bi bi-question-circle"></i></a></p>
+        <div class="chart-container" style="position: relative; width: 100%; height: 400px">
+            <canvas id="glu3" style="width: 100%; height: 400px"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx_glu3 = document.getElementById('glu3');
+            new Chart(ctx_glu3, {
+                data: {
+                    labels: [{/literal}{$info.glu3.labels}{literal}],datasets: [
+            {type:'line', label:'Спящие', borderWidth: 1, data: [{/literal}{$info.glu3.sleept}{literal}]},
+                        {type:'line',label:'Засыпающие',borderWidth: 1, data: [{/literal}{$info.glu3.zasyp}{literal}]},
+                                {type:'line',label:'Активные',  borderWidth: 1, data: [{/literal}{$info.glu3.activ}{literal}]}
+                                    ]},options: { scales: { y: { beginAtZero: true } }, responsive: true }
+            });
+        </script>
+        {/literal}
+    </div>
+</div>
+<div class="row" style="display:none;">
+    <div class="col-md-12"><blockquote class="blockquote"><p>Графики по данным m2_progress (Модель: project_1911)</p></blockquote></div>
+    <div class="col-md-12"><a href="https://t.me/kambur_tt9" class="btn btn-info btn-sm" target="_blank">Пётр DA</a> Динамика изменения value по датам </div>
+    <div class="col-md-12">
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="dimz01" style="position: relative;width: 100%;height: 400px;"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx_dimz01 = document.getElementById('dimz01');
+            new Chart(ctx_dimz01, {
+                data: {
+                    labels: [{/literal}{$info.dimz01.labels}{literal}],
+                    datasets: [
+                        {type:'bar',label:'m2_progress',borderWidth: 1,data: [{/literal}{$info.dimz01.values}{literal}]}
+                    ]
+                },
+                options: { scales: { y: { beginAtZero: true } }, responsive: true }
+            });
+        </script>{/literal}
+    </div>
+    <div class="col-md-12"><a href="https://t.me/kambur_tt9" class="btn btn-info btn-sm" target="_blank">Пётр DA</a> Распределение  value по day_num: </div>
+    <div class="col-md-12">
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="dimz02" style="position: relative;width: 100%;height: 400px;"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx_dimz02 = document.getElementById('dimz02');
+            new Chart(ctx_dimz02, {
+                data: {
+                    labels: [{/literal}{$info.dimz02.labels}{literal}],
+                    datasets: [
+                        {type:'line',label:'q1',borderWidth: 1,data: [{/literal}{$info.dimz02.q1}{literal}]},
+                        {type:'line',label:'median',borderWidth: 1,data: [{/literal}{$info.dimz02.median}{literal}]},
+                        {type:'line',label:'q3',borderWidth: 1,data: [{/literal}{$info.dimz02.q3}{literal}]}
+                    ]
+                },
+                options: { scales: { y: { beginAtZero: true } }, responsive: true }
+            });
+        </script>{/literal}
+    </div>
+</div>

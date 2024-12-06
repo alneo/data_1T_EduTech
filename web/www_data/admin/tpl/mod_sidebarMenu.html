@@ -1,0 +1,23 @@
+<nav id="sidebarMenu" class="col-md-4 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item"><a class="nav-link {if $CHPU[0]==''}active{/if}" href="/admin/">Главная</a></li>
+            {foreach from=$MENU item=menui}
+            {if isset($menui.menu_show)&&$menui.menu_show==1}
+            {if isset($aUSER.dostup)&&in_array($menui.url,$aUSER.dostup)}
+            <li class="nav-item"><a class="nav-link {if $CHPU[0]==$menui.url}active{/if}" href="/admin/{$menui.url}/">{$menui.name}</a></li>
+            {/if}
+            {/if}
+            {/foreach}
+        </ul>
+        <div class="fixed-bottom" style="width: fit-content;">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Пользователь</span>
+            </h6>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="/admin/logout/">Выход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+

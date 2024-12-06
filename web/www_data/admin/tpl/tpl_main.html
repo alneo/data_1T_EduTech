@@ -1,0 +1,40 @@
+{include file="tpl_head.html"}
+{include file="tpl_main_header.html"}
+<main>
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="
+        background: radial-gradient(#a23982,#1f1013);
+        -webkit-animation: fadeIn 1 1s ease-out;
+        -moz-animation: fadeIn 1 1s ease-out;
+        -o-animation: fadeIn 1 1s ease-out;
+        animation: fadeIn 1 1s ease-out;">
+        <div class="d-none d-md-block" style="background: url('/uploads/itpath_01_top_right.png');background-size: contain;background-repeat: no-repeat;transform: none;bottom:-60px;width:500px;height:500px;position: absolute;right:-54px;"></div>
+        <div class="product-device-2 shadow-sm d-none d-md-block" style="background: url('/uploads/itpath_01_top_left.png');background-size: contain;background-repeat: no-repeat;transform: none;top:0px;width:400px;height:400px;position: absolute;left:0px;box-shadow: none !important;"></div>
+
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+        </div>
+    </div>
+    {literal}
+    <style>
+        @media (min-width: 766px) and (max-width: 1260px) {
+            #head1{ font-size: 30px; }
+            #head2{ font-size: 30px; }
+            #head3{ font-size: 30px; }
+            #head4{ font-size: 30px; }
+            #head5{ font-size: 35px; }
+        }
+    </style>
+    {/literal}
+    <div class="container">
+        <div class="row">
+            <main class="col-md-12" style="position: relative;">
+                {$PAGE.body}
+            </main>
+        </div>
+    </div>
+
+</main>
+{include file="tpl_main_footer.html"}
+
+{include file="tpl_footer.html"}
+</body>
+</html>

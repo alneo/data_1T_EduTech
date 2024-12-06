@@ -1,0 +1,121 @@
+<h1 class="display-6">Конфигурация системы</h1>
+<blockquote class="blockquote">
+    <p>Настройка параметров системы</p>
+</blockquote>
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="row g-3" method="post">
+            <div class="col-12">
+                <b>Настройки соединений - соединения с базой клиента</b>
+            </div>
+            <div class="col-md-3">
+                <label for="set_01" class="form-label">Хост сервера БД</label>
+                <input type="text" class="form-control" id="set_01" name="client_config[host]" value="{$item.client_config.host}">
+            </div>
+            <div class="col-md-2">
+                <label for="set_02" class="form-label">Порт сервера БД</label>
+                <input type="text" class="form-control" id="set_02" name="client_config[port]" value="{$item.client_config.port}">
+            </div>
+            <div class="col-md-3">
+                <label for="set_03" class="form-label">База данных</label>
+                <input type="text" class="form-control" id="set_03" name="client_config[database]" value="{$item.client_config.database}">
+            </div>
+            <div class="col-md-2">
+                <label for="set_04" class="form-label">Логин</label>
+                <input type="text" class="form-control" id="set_04" name="client_config[login]" value="{$item.client_config.login}">
+            </div>
+            <div class="col-md-2">
+                <label for="set_05" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="set_05" name="client_config[passw]" value="{$item.client_config.passw}">
+            </div>
+
+            <div class="col-12">
+                <b>Настройки соединений - соединения с сервером моделей</b>
+            </div>
+            <div class="col-md-3">
+                <label for="set1_01" class="form-label">Адрес сервера</label>
+                <input type="text" class="form-control" id="set1_01" placeholder="https://edutech.1t.ru" name="model_config[host]" value="{$item.model_config.host}">
+            </div>
+            <div class="col-md-2">
+                <label for="set1_02" class="form-label">Порт сервера</label>
+                <input type="text" class="form-control" id="set1_02" placeholder="443" name="model_config[port]" value="{$item.model_config.port}">
+            </div>
+            <div class="col-md-3">
+                <label for="set1_03" class="form-label">Путь</label>
+                <input type="text" class="form-control" id="set1_03" placeholder="/api/v1/" name="model_config[path]" value="{$item.model_config.path}">
+            </div>
+            <div class="col-md-2">
+                <label for="set1_04" class="form-label">Логин</label>
+                <input type="text" class="form-control" id="set1_04" name="model_config[login]" value="{$item.model_config.login}">
+            </div>
+            <div class="col-md-2">
+                <label for="set1_05" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="set1_05" name="model_config[passw]" value="{$item.model_config.passw}">
+            </div>
+
+            <div class="col-12">
+                <b>Настройки моделей</b>
+            </div>
+            <div class="col-md-4">
+                <label for="set2_01" class="form-label">Модель для классификации обучающихся</label>
+                <select id="set2_01" class="form-select" name="model_classif">
+                    <option selected>еще не разработали</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="set2_02" class="form-label">Модель для прогнозирования окончания курса</label>
+                <select id="set2_02" class="form-select" name="model_prognoz">
+                    <option value="" selected>не выбрана</option>
+                    <option value="project_1611" {if $item.model_prognoz=='project_1611'}SELECTED{/if}>project_1611</option>
+                    <option value="project_1911" {if $item.model_prognoz=='project_1911'}SELECTED{/if}>project_1911</option>
+                    <option value="project_2411_clf" {if $item.model_prognoz=='project_2411_clf'}SELECTED{/if}>project_2411_clf</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="set2_03" class="form-label">Модель по обучающемуся</label>
+                <select id="set2_03" class="form-select" name="model_studyie">
+                    <option selected>еще не разработали</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <b>Оповещение - общие настройки, кому и с какого емаил отправлять</b>
+            </div>
+            <div class="col-md-3">
+                <label for="inputEmail4" class="form-label">Email для оповещений</label>
+                <input type="email" class="form-control" id="inputEmail4" name="email_config[email]" value="{$item.email_config.email}">
+            </div>
+            <div class="col-md-2">
+                <label for="inputEmail42" class="form-label">SMTP хост</label>
+                <input type="text" class="form-control" id="inputEmail42" name="email_config[host]" value="{$item.email_config.host}">
+            </div>
+            <div class="col-md-2">
+                <label for="inputEmail41" class="form-label">SMTP логин</label>
+                <input type="text" class="form-control" id="inputEmail41" name="email_config[login]" value="{$item.email_config.login}">
+            </div>
+            <div class="col-md-2">
+                <label for="inputEmail40" class="form-label">SMTP пароль</label>
+                <input type="password" class="form-control" id="inputEmail40" name="email_config[passw]" value="{$item.email_config.passw}">
+            </div>
+            <div class="col-md-1">
+                <label for="inputEmail43" class="form-label">SMTP порт</label>
+                <input type="text" class="form-control" id="inputEmail43" name="email_config[port]" value="{$item.email_config.port}">
+            </div>
+            <div class="col-md-2">
+                <label for="inputState" class="form-label">SMTP параметры</label>
+                <select id="inputState" class="form-select" name="email_config[secur]">
+                    <option value="" selected>не выбрано</option>
+                    <option value="tsl">TSL</option>
+                    <option value="notsl">noTSL</option>
+                    <option value="ssl">SSl</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <input type="hidden" name="id" value="{$item.id}">
+                <button type="submit" class="btn btn-primary" name="save_config">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>

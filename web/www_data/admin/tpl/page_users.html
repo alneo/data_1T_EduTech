@@ -1,0 +1,77 @@
+{if $des=='add'||$des=='edit'}
+{if $des=='add'}<h2>Добавление элемента</h2>{/if}
+{if $des=='edit'}<h2>Редактирование элемента</h2>{/if}
+{* id data_c email passw status *}
+
+<form class="row g-3" method="post">
+    <div class="col-md-4">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" class="form-control" id="email" name="email" placeholder="email" value="{$item.email}">
+    </div>
+    <div class="col-md-4">
+        <label for="passw" class="form-label">Парорль</label>
+        <input type="password" class="form-control" id="passw" name="passw" placeholder="пароль" value="">
+    </div>
+    <div class="col-md-4">
+        <label for="status" class="form-label">Статус</label>
+        <div class="form-check">
+            <select class="form-select" name="status" id="status">
+                {foreach from=$statuses item=status key=id}
+                <option value="{$id}" {if $item.status==$id}SELECTED{/if}>{$status}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label for="dostup" class="form-label">Доступ к разделам сайта</label>
+        <div class="form-check">
+            {foreach from=$menus item=menu key=name}
+            <div class="form-check form-switch col-md-6">
+                <input class="form-check-input" type="checkbox" role="switch" id="dostup_{$menu}" value="{$name}" name="dostup[]" {if in_array($name,$item.dostup)}CHECKED{/if}>
+                <label class="form-check-label" for="dostup_{$menu}">{$menu}</label>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="col-6">
+        <input type="hidden" name="id" value="{$item.id}">
+        {if $des=='add'}<input type="submit" class="btn btn-primary" name="add" value="Добавить">{/if}
+        {if $des=='edit'}<input type="submit" class="btn btn-primary" name="edit" value="Редактировать">{/if}
+    </div>
+</form>
+<div class="test_results_wrap" style="position:absolute;right:10px;bottom: 10px;width:600px;height:300px;background-color: #c4c4c4;padding:10px;display:none;">
+    <div class="test_results_head" style="width: 100%;height:20px;text-align: right;"><a href="#" class="btn btn-sm test_results_close">закрыть</a> </div>
+    <div class="test_results_text" style="width: 100%;height:280px;overflow: auto;"></div>
+</div>
+{/if}
+
+{if $des=='view'}
+<table class="table">
+    <thead>
+    <tr>
+        <th>№</th>
+        <th>Дата</th>
+        <th>Email</th>
+        <th>Статус</th>
+        <th><a href="{$path}add/" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Добавление"><i class="bi bi-plus-square"></i></a></th>
+    </tr>
+    </thead>
+    <tbody>{foreach from=$items item=item}
+    <tr>
+        <td rowspan="2">{$item.id}</td>
+        <td>{date('d.m.Y',$item.data_c)}</td>
+        <td>{$item.email}</td>
+        <td>{$statuses[$item.status]}</td>
+        <td>
+            <a href="{$path}edit/{$item.id}" class="btn btn-sm btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Редактирование"><i class="bi bi-pencil"></i></a>
+            <a href="{$path}del/{$item.id}" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Удаление"><i class="bi bi-trash"></i></a>
+            {if $aUSER.status==99}<a href="{$path}log/{$item.id}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Логи"><i class="bi bi-list-columns"></i></a>{/if}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">{foreach from=$item.dostup item=dat}<span class="badge bg-success">{$menus[$dat]}</span> {/foreach}</td>
+    </tr>
+    {/foreach}</tbody>
+</table>
+{/if}

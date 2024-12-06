@@ -1,0 +1,378 @@
+{if $des=='user'}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<h1 class="display-6">Информация по пользователю</h1>
+<blockquote class="blockquote">
+    <p>На странице необходимо отобразить информацию, которая поможет заказчику понять состояние обучающегося и на основании этого принять меры.</p>
+</blockquote>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4" style="position: relative;">
+                    <div style="position: absolute;left:0px;top:0px;right:0px;bottom:0px;background-image: url({$student.profile.picture.large});background-repeat: no-repeat;background-position: center; background-size: cover;"></div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <span class="position-absolute translate-middle badge rounded-pill {if $student.state.item.state==0}bg-danger{/if}{if $student.state.item.state==1}bg-warning{/if}{if $student.state.item.state==2}bg-success{/if}" style="right:10px;top:0px;">{$student.state.item.name}<span class="visually-hidden">статус</span></span>
+                        <h5 class="card-title">{$student.fio}</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-xs-5 col-sm-5 col-md-3">
+                                <span class="badge bg-light text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Общее время на платформе">00:05:34</span>
+                            </div>
+                            <div class="col-xs-5 col-sm-5 col-md-2">
+                                <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Средняя оценка">{if isset($student.tasks[0])}{round($student.tasks[0].avg_result,2)}{else}0{/if}</span>
+                            </div>
+                            <div class="col-xs-5 col-sm-5 col-md-3">
+                                <span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Курс обучения">{$student.info[0].kurs}</span>
+                            </div>
+                            <div class="col-xs-5 col-sm-5 col-md-2">
+                                <span class="badge bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Статус подключения Telegram бота">{$student.info[0].tg_bot}</span>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <span style="font-size: 10px; color:gray;">Прогресс:</span><br><span class="badge bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Прогресс">{if isset($student.tasks[0])}{round($student.tasks[0].progress,2)}{else}0{/if}</span>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <span style="font-size: 10px; color:gray;">Аттестация:</span><br><span class="badge bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Аттестация">{if isset($student.tasks[0])}{round($student.tasks[0].attestation,2)}{else}0{/if}</span>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <span style="font-size: 10px; color:gray;">Ср.&nbsp;результат:</span><br><span class="badge bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Средний результат">{if isset($student.tasks[0])}{round($student.tasks[0].avg_result,2)}{else}0{/if}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        {if isset($student.tasks[0])}
+        <!--span class="badge rounded-pill bg-light text-dark"  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="select count(distinct task_id) filter(where is_attestation=0) sum_task_id, count(distinct activivty_id) filter(where obyaz_priznak = 1 and is_attestation=0) sum_obyaz_activivty, count(distinct activivty_id) filter(where obyaz_priznak = 0) sum_neobyaz_activivty, avg(m2_progress) progress, avg(m2_attestation)  attestation, round(avg(result), 1) avg_result from public.dataset_h_v3 where user_id=0000 and result_time is not null"><i class="bi bi-info-circle"></i></span-->
+        <!--p>
+            <b>Всего заданий:</b>: <span>{$student.tasks[0].sum_task_id}</span><br>
+            <b>Обязательных заданий</b>: <span>{$student.tasks[0].sum_obyaz_activity}</span><br>
+            <b>Необязательные задания</b>: <span>{$student.tasks[0].sum_neobyaz_activivty}</span><br>
+            <b>Прогресс</b>: <span>{round($student.tasks[0].progress,2)}</span><br>
+            <b>Аттестация</b>: <span>{round($student.tasks[0].attestation,2)}</span><br>
+            <b>Средний результат</b>: <span>{round($student.tasks[0].avg_result,2)}</span>
+        </p-->
+
+        <div class="chart-container" style="position: relative;width:100%; height:200px;">
+            <canvas id="info_exercies" style="width:100%; height:200px;"></canvas>
+        </div>
+        {literal}
+        <script>
+        const ctx = document.getElementById('info_exercies');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Всего заданий','Обязательных заданий','Необязательные задания'],
+                datasets: [{
+                    axis: 'y',
+                    label: 'Задания',
+                    data: [{/literal}{$student.tasks[0].sum_task_id},{$student.tasks[0].sum_obyaz_activity},{$student.tasks[0].sum_neobyaz_activivty}{literal}],
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)'],
+                    borderWidth: 1
+                }]
+            },options: {indexAxis: 'y',responsive: true}
+        });
+        </script>{/literal}
+        {/if}
+    </div>
+
+    <div class="col-md-12">
+        {if count($student.history)}
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="history_act" style="width:100%; height:400px;"></canvas>
+        </div>
+        {literal}
+        <script>
+            const ctx1 = document.getElementById('history_act');
+            new Chart(ctx1, {
+                data: {
+                    labels: ['{/literal}{implode("', '",$student.history.act_obyaz_ch1.labels)}{literal}'],
+                    datasets: [{
+                        type: 'line',
+                        axis: 'y',
+                        label: 'Кол-во просмотров обязательных заданий',
+                        data: [{/literal}{implode(",",$student.history.act_obyaz_ch1.data)}{literal}],
+                        fill: false,
+                        borderColor: 'rgb(178,176,0)',
+                        tension: 0.1
+                    },{
+                        type: 'line',
+                        label: 'Кол-во просмотров не обязательных заданий',
+                        data: [{/literal}{implode(",",$student.history.act_obyaz_ch2.data)}{literal}],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    },{
+                        type: 'line',
+                        label: 'Кол-во просмотров аттестационных заданий',
+                        data: [{/literal}{implode(",",$student.history.act_obyaz_ch3.data)}{literal}],
+                        fill: false,
+                        borderColor: 'rgb(222,0,0)',
+                        tension: 0.1
+                }]
+                },options: {responsive: true}
+            });
+        </script>{/literal}
+        {/if}
+        {*<pre>{print_r($student.history)}</pre>*}
+    </div>
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="TabLog" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="TabLog-tab-01" data-bs-toggle="tab" data-bs-target="#tabLog-tab-01d" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    Просмотры активностей <span class="badge rounded-pill bg-light text-dark"  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="select ahv2.created_at,ahv2.page_type,ahv2.module,ahv2.attestation,ahv2.activity_type,ag2.course,ag2.theme,ag2.exercise,ag2.activity_type,ag2.activity,ag2.obyaz_priznak from activity_history_viewed_v2 as ahv2,activities_guide_v2 as ag2 where ahv2.user_id = 000 AND ag2.activity_id = ahv2.page_id ORDER BY ahv2.created_at DESC LIMIT 10"><i class="bi bi-info-circle"></i></span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="TabLog-tab-02" data-bs-toggle="tab" data-bs-target="#tabLog-tab-02d" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                    Просмотры вебинаров <span class="badge rounded-pill bg-light text-dark"  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="select wbl.datetime,wbl.event_name,wbl.conn_format,wbl.webinar_vvod,ag2.course,ag2.theme,ag2.exercise,ag2.activity_type,ag2.activity,ag2.obyaz_priznak from webinars_logs_v2 as wbl,activities_guide_v2 as ag2 where wbl.user_id=0000 AND wbl.event_name='Подключение' AND ag2.activity_id = wbl.webinar_id ORDER BY wbl.datetime DESC LIMIT 10"><i class="bi bi-info-circle"></i></span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="TabLog-tab-03" data-bs-toggle="tab" data-bs-target="#tabLog-tab-03d" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                    Результаты заданий <span class="badge rounded-pill bg-light text-dark" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="select exr2.created_at,exr2.result,exr2.success,ag2.course,ag2.theme,ag2.exercise,ag2.activity_type,ag2.activity,ag2.obyaz_priznak from exercise_results_v2 as exr2,activities_guide_v2 as ag2 where exr2.user_id=0000 AND ag2.activity_id = exr2.activity_id ORDER BY exr2.created_at DESC LIMIT 10"><i class="bi bi-info-circle"></i></span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="TabLog-tab-04" data-bs-toggle="tab" data-bs-target="#tabLog-tab-04d" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                    Последние 10 авторизаций <span class="badge rounded-pill bg-light text-dark"  data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="SELECT created_at,user_agent,window_size FROM authorization_v2 where user_id=0000 ORDER BY created_at DESC LIMIT 10"><i class="bi bi-info-circle"></i></span>
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="TabLogContent">
+            <div class="tab-pane fade show active" id="tabLog-tab-01d" role="tabpanel" aria-labelledby="TabLog-tab-01">
+                <div class="table-responsive" style="max-height: 500px;height: 500px;">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th class="col-2">Дата</th>
+                            <th class="col-5">Курс</th>
+                            <th class="col-5">Тема</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach from=$student.activity item=item}
+                        <tr {if $item.obyaz_priznak==1}class="table-warning"{/if}>
+                            <td>
+                                <span class="fw-lighter">{date('H:i',strtotime($item.created_at))}</span>
+                                <span class="fw-lighter text-secondary"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="{date('d.m.Y',strtotime($item.created_at))}">{date('d.m',strtotime($item.created_at))}</span>
+                            </td>
+                            <td>{$item.course}</td>
+                            <td>{$item.theme}</td>
+                        </tr>
+                        <tr class="border-info{if $item.obyaz_priznak==1} table-warning{/if}">
+                            <td style="text-align: right;">{$item.activity_type}</td>
+                            <td>{$item.exercise}</td>
+                            <td>{$item.activity}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tabLog-tab-02d" role="tabpanel" aria-labelledby="TabLog-tab-02">
+                <div class="table-responsive" style="max-height: 500px;height: 500px;">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th class="col-2">Дата</th>
+                            <th class="col-5">Курс</th>
+                            <th class="col-5">Тема</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach from=$student.webinars item=item}
+                        <tr {if $item.obyaz_priznak==1}class="table-warning"{/if}>
+                            <td>
+                                <span class="fw-lighter">{date('H:i',strtotime($item.datetime))}</span>
+                                <span class="fw-lighter text-secondary"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="{date('d.m.Y',strtotime($item.datetime))}">{date('d.m',strtotime($item.datetime))}</span>
+                            </td>
+                            <td>{$item.course}</td>
+                            <td>{$item.theme}</td>
+                        </tr>
+                        <tr class="border-info{if $item.obyaz_priznak==1} table-warning{/if}">
+                            <td style="text-align: right">{$item.conn_format}</td>
+                            <td>{$item.exercise}</td>
+                            <td>{$item.activity}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tabLog-tab-03d" role="tabpanel" aria-labelledby="TabLog-tab-03">
+                <div class="table-responsive" style="max-height: 500px;height: 500px;">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th class="col-2">Дата</th>
+                            <th class="col-4">Курс</th>
+                            <th class="col-6">Тема</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach from=$student.exercise item=item}
+                        <tr {if $item.obyaz_priznak==1}class="table-warning"{/if}>
+                            <td>
+                                <span class="fw-lighter">{date('H:i',strtotime($item.created_at))}</span>
+                                <span class="fw-lighter text-secondary"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="{date('d.m.Y',strtotime($item.created_at))}">{date('d.m',strtotime($item.created_at))}</span>
+                            </td>
+                            <td>{$item.course}</td>
+                            <td>{$item.theme}</td>
+                        </tr>
+                        <tr class="border-info{if $item.obyaz_priznak==1} table-warning{/if}">
+                            <td style="text-align: center;"><b>{$item.result}</b></td>
+                            <td>{$item.exercise}</td>
+                            <td colspan="2">{$item.activity}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tabLog-tab-04d" role="tabpanel" aria-labelledby="TabLog-tab-04">
+                <div class="table-responsive" style="max-height: 500px;height: 500px;">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>ЮзерАгент</th>
+                            <th>Окно</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach from=$student.auth item=auth}<tr>
+                            <td>{date('H:i',strtotime($auth.created_at))} {date('d.m.Y',strtotime($auth.created_at))}</td>
+                            <td><span class="badge rounded-pill bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{$auth.user_agent}">{$auth.user_agent|truncate:30:"...":true}</span></td>
+                            <td><span class="badge rounded-pill bg-info text-dark" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Размер окна пользователя">{$auth.window_size}</span></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+
+
+{if $des=='view'}
+<h1 class="display-6">Список обучающихся</h1>
+{literal}<style>
+    /*.tr{cursor: pointer;}*/
+</style>{/literal}
+{include file="mod_students_filter.html"}
+
+<div class="table-responsive">
+<table class="table table-hover table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Курс</th>
+        <th>Статус</th>
+        <th><span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Вероятность смены статуса, данные представлены случайные!">Р(А) статус</span></th>
+        <th><span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Вероятность завершения курса, данные представлены случайные!">Р(А) курс</span></th>
+        <th><span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Прогнозируемый результат (m2_progress)">Прогнозируемый результат</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach from=$students.items item=student}<tr class="tr tr_{$students.kurss[$student.kurs]} trst_{$student.state.item.state}" data-iduser="{$student.user_id}">
+        <td>{$student.user_id}</td>
+        <td>{$student.kurs}</td>
+        <td>
+            <span
+                    class="badge rounded-pill {if $student.state.status==-1}bg-secondary{/if}{if $student.state.status==0}bg-danger{/if}{if $student.state.status==1}bg-warning text-dark{/if}{if $student.state.status==2}bg-success{/if}"
+            >
+                {if $student.state.status==-1}не определен{/if}
+                {if $student.state.status==0}спящий{/if}
+                {if $student.state.status==1}засыпающий{/if}
+                {if $student.state.status==2}активный{/if}
+            </span>
+        </td>
+        <td>
+            {if $student.pa_state.case!='NO_CHANGE'&&$student.pa_state.case!=''}<span
+                    class="badge rounded-pill {if $student.pa_state.case=='UP'}bg-success{/if}{if $student.pa_state.case=='DOWN'}bg-danger{/if}"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Вероятность смены статуса {if $student.pa_state.case=='UP'}в лучшую сторону{/if}{if $student.pa_state.case=='DOWN'}в худшую сторону{/if} относительно предыдущего периода"
+            >
+                {if $student.pa_state.case=='UP'}<i class="bi bi-arrow-up"></i>{/if}
+                {if $student.pa_state.case=='DOWN'}<i class="bi bi-arrow-down"></i>{/if}
+            </span>{/if}
+        </td>
+        <td>
+            {if $student.m2_success.result2!=0}
+            {if $student.m2_success.result2<$student.m2_success.result1}
+            <span class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Смена процента вероятности на низший {round($student.m2_success.result2-$student.m2_success.result1,2)}"><i class="bi bi-arrow-down"></i></span>
+            {/if}
+            {if $student.m2_success.result2>$student.m2_success.result1}
+            <span class="text-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Смена процента на высший {round($student.m2_success.result2-$student.m2_success.result1,2)}"><i class="bi bi-arrow-up"></i></span>
+            {/if}
+
+            <span class="badge {if $student.m2_success.result2<30}bg-danger{/if}{if $student.m2_success.result2>=30&&$student.m2_success.result2<60}bg-warning text-dark{/if}{if $student.m2_success.result2>=60}bg-success{/if}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Процент вероятности завершения курса">{round($student.m2_success.result2,0)}%</span>
+            {else}
+            -
+            {/if}
+        </td>
+        <td>
+            {if $student.m2_progress.result!=0}
+            <span class="badge {if $student.m2_progress.result<30}bg-danger{/if}{if $student.m2_progress.result>=30&&$student.m2_progress.result<60}bg-warning text-dark{/if}{if $student.m2_progress.result>=60}bg-success{/if}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="m2_progress">{round($student.m2_progress.result,0)}%</span>
+            {else}
+            -
+            {/if}
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+</div>
+{literal}<script>$(document).ready(function(){
+    // $(".tr").click(function(){
+    //     let iduser=$(this).data('iduser');
+    //     window.location.href = "https://edutech.alneo.ru:20003/admin/students/user/"+iduser+"/";
+    // })
+    $(".curss_toggle").click(function(){
+        let md5=$(this).data('md5');
+        $(".curss_view").val(md5);
+        $(".curss_toggle").removeClass("btn-success").addClass("btn-primary");
+        $(this).addClass("btn-success");
+        tr_toggle();
+        return false;
+    });
+    $(".state_toggle").click(function(){
+        let state=$(this).data('state');
+        $(".state_view").val(state);
+        $(".state_toggle").removeClass("btn-success").addClass("btn-primary");
+        $(this).addClass("btn-success");
+        tr_toggle();
+        return false;
+    });
+    function tr_toggle(){
+        let md5  =$(".curss_view").val();
+        let state=$(".state_view").val();
+        if(md5 == '') {
+            $(".tr").show();
+            if(state != '') {
+                $(".tr").hide();
+                $(".trst_"+state).show();
+            }else {
+                $(".tr").show();
+            }
+        }else {
+            if(state == '') {
+                $(".tr").hide();
+                $(".tr_"+md5).show();
+            }else {
+                $(".tr").hide();
+                $(".tr_"+md5+".trst_"+state).show();
+            }
+        }
+    }
+})</script>{/literal}
+{/if}

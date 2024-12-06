@@ -1,0 +1,94 @@
+<h1 class="display-6">Статистика</h1>
+<blockquote class="blockquote">
+    <p>Оценка модели на валидационных данных: <b>mae</b> = mean_absolute_error(y_val_week, predictions)</p>
+</blockquote>
+
+{*<pre>{print_r($stats.lines)}</pre>
+<pre>{print_r($stats.graph)}</pre>*}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{assign var=num value=1}
+{foreach from=$stats.graph item=datasj key=name}
+<div class="row">
+    <div class="col-md-12">
+        <b>{$name}</b>
+        <div class="chart-container" style="position: relative;width:100%; height:400px;">
+            <canvas id="stats_{$num}" style="width:100%; height:400px;"></canvas>
+        </div>
+    </div>
+</div>
+{literal}
+<script>
+    const ctx{/literal}{$num}{literal} = document.getElementById('stats_{/literal}{$num}{literal}');
+    new Chart(ctx{/literal}{$num}{literal}, {
+        data: {
+            labels: ['{/literal}{implode("','",$stats.datas)}{literal}'],
+            datasets: [{/literal}{implode(",",$datasj.linesj)}{literal}]
+        },
+        options: {scales: {y: {beginAtZero: true}},responsive: true}
+    });
+</script>{/literal}
+{assign var=num value=$num+1}
+{/foreach}
+
+{foreach from=$stats.items item=items}
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Автор">Автор</span>
+        </th><th>{$items.login}</th>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Имя файла">Имя файла</span>
+        </th><th>{$items.file_name}</th>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Кол-во блоков">Кол-во блоков</span>
+        </th><th>{$items.row_count}</th>
+    </tr>
+    <tr>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Размер файла">Размер файла</span>
+        </th><th>{$items.filesize}</th>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Время запуска">Время запуска</span>
+        </th><th>{date('H:i:s d.m.Y',strtotime($items.last_modified))}</th>
+        <th>
+            <span class="badge rounded-pill bg-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Блоки кода">Блоки кода</span>
+        </th><th>{$items.py_block}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><td colspan="6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Вариант расчета</th>
+                <th>нед.01</th>
+                <th>нед.02</th>
+                <th>нед.03</th>
+                <th>нед.04</th>
+                <th>нед.05</th>
+                <th>нед.06</th>
+                <th>нед.07</th>
+                <th>нед.08</th>
+                <th>нед.09</th>
+                <th>нед.10</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$items.metric_descrs item=metric}
+            <tr>
+                <td>{$metric.metric_descr}</td>
+                {assign var="kol" value=0}
+                {foreach from=$metric.metric_names item=value key=name}
+                {if $kol==10}</tr><tr><td></td>{/if}
+                <td><span class="badge rounded-pill bg-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{$name}">{$value}</span></td>
+                {assign var="kol" value=$kol+1}
+                {/foreach}
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </td></tr>
+    </tbody>
+</table>
+{/foreach}
