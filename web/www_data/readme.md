@@ -10,4 +10,121 @@
 
 В системе реализована проверка работы получения данных.
 
-Для полноценной работы необходимо настроить cron на обработку данных о пользователях (см. python/progon_users_v4.py)
+Для полноценной работы необходимо настроить cron на обработку данных о пользователях см. [python/progon_users.py](./python/progon_users.py)
+
+Веб интерфейс получает данные из таблиц в которые поступают данные от работы python скрипта.
+
+
+## Конфиг админки admin/config.php
+
+```
+<?php
+spl_autoload_register(function ($class_name) {
+    if(file_exists('inc/'.$class_name . '.php')){
+        include_once 'inc/'.$class_name . '.php';
+    }else{
+        $mDIR = __DIR__;
+        if(file_exists($mDIR.'/inc/'.$class_name . '.php')) {
+            include_once $mDIR.'/inc/' . $class_name . '.php';
+        }
+    }
+});
+date_default_timezone_set('Europe/Moscow');
+$ST['dbpf'] = 'mm';
+$ST['maindir'] = $_SERVER['HOME'].'/';
+$ST['MAIN_URL'] = 'https://'.$_SERVER['HTTP_HOST'];
+
+$ST['PGSQL']['host']='';
+$ST['PGSQL']['database']='';
+$ST['PGSQL']['user']='';
+$ST['PGSQL']['password']='';
+$ST['PGSQL']['port']=21000;
+
+$DB = new class_DB('%DB_db%','%DB_user%','%DB_passw%','web_mysql',3306);
+$DB->QUR('SET NAMES "utf8mb4"');
+
+$ST['route'] = array(
+    'students'=>    array('class'=>'class_STUDENTS','url'=>'students',      'name'=>'Обучающиеся',  'menu_show'=>1, 'auth'=>true),
+    'admin'=>       array('class'=>'class_USERS',   'url'=>'users',         'name'=>'Пользователи', 'menu_show'=>0, 'auth'=>true),
+    'logout'=>      array('class'=>'class_USERS',   'url'=>'logout',        'name'=>'Выход',        'menu_show'=>0),
+    'config'=>      array('class'=>'class_CONFIG',  'url'=>'config',        'name'=>'Настройки',    'menu_show'=>1),
+    'users'=>       array('class'=>'class_USERS',   'url'=>'users',         'name'=>'Пользователи', 'menu_show'=>1),
+    'main'=>        array('class'=>'class_MAIN',    'url'=>'main',          'name'=>'Главная',      'menu_show'=>1),
+    'stats'=>       array('class'=>'class_STATS',   'url'=>'stats',         'name'=>'Статистика',   'menu_show'=>1),
+    'model'=>       array('class'=>'class_MODEL',   'url'=>'model',         'name'=>'Предсказания', 'menu_show'=>1),
+);
+```
+
+Необходимо указать данные для подключения к базе данных PostgreSQL
+
+```
+$ST['PGSQL']['host']='';
+$ST['PGSQL']['database']='';
+$ST['PGSQL']['user']='';
+$ST['PGSQL']['password']='';
+$ST['PGSQL']['port']=21000;
+```
+
+Необходимо указать данные для подключения к базе данных MySQL
+
+```
+$DB = new class_DB('%DB_db%','%DB_user%','%DB_passw%','web_mysql',3306);
+```
+
+хост `web_mysql` и порт `3306` указаны в docker
+
+## Директория sqls
+
+В директории расположены SQL скрипты для работы веб интерфейса:
+
+* `main_graph_01.sql` - SQL запрос для формирования перовго графика на главной страница
+* `main_graph_02.sql` - SQL запрос для формирования второго графика на главной страница
+* `main_graph_04.sql` - SQL запрос для формирования четвертого графика на главной страница
+* `students_list.sql` - SQL запрос для формирвоания спсика студентов на старнице Обучающиеся с учетом выбранных парамтеров фильтра
+* `students_pa_status.sql` - SQL запрос для получения информации верятности смены статуса в таблице обучающихся для одного обучающегося
+
+# Основные моменты работы
+## Класс class_MAIN
+
+Реализует вывод информации на главную страницу, использует SQL скрипты из папки `sql`
+
+## Класс class_STUDENTS
+
+Реализует раздел для отображения списка студентов, тут логика работы фильтра обучающихся и получение параметров об обучающихся
+
+## Класс class_MODEL
+
+Реализует раздел для проверки работы получения данных от обученной модели (текущая модель указывается в настройках системы) для выбранного обучающегося
+
+## Класс class_UI
+
+Реализует основной routing системы, подключает необходимые классы, во всех классах должен быть метод HTML который и выводить информацию на странцу## Класс class_USERSРеализует проверку авторизации пользователя и страницу управления пользователями
+
+## Класс class_CONFIG
+
+Реализует раздел для настройки системы, сохранение и редактирование
+
+## Класс class_CHPU
+
+Реализует работу `ЧПУ`
+
+## Класс class_DB
+
+Реализует работу с базой данных `mysql`
+
+## Класс class_PGSQL
+
+Реализует работу с базой данных `postgreSQL`
+
+## Класс class_STATS
+
+Реализует раздел для отображения иняормации об обучении модели - не относится к основной задаче проекта (реализовался для выполнения личного задания)
+
+# Интерфейс веб приложения
+
+Интерфейс реализован с помощью `smarty` выведен в отдельный каталог tpl
+
+* page_main.html - главная страница
+* page_students.html - страница обучающиеся
+
+
