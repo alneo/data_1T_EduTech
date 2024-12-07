@@ -60,4 +60,4 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
       - ./mysql/db:/var/lib/mysql
 ```
 
-Необходимо указать доступы, которые в дальнейшем использовать в конфигурационном файле [www_data/admin/config.php](./www_data/admin/config.php)
+Необходимо указать доступы, которые в дальнейшем использовать в конфигурационном файле `www_data/admin/config.php`

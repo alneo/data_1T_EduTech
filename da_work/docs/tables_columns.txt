@@ -1,0 +1,35 @@
+table: exercise_results_v2
+user_id (select)
+activity_id (select, where) 
+created_at (select) 
+result (select)
+success (where) 
+
+table: activity_history_viewed_v2
+user_id (select), 
+page_id (select) 
+activity_id (select)
+attestation (select)
+created_at (select)
+page_type (where)
+
+table: schedule_v2
+course_id (select)
+date_shown (select)
+activivty_id (where) - по этому ключу делаем join
+type (where)
+
+table: activities_guide_v2
+activity_id (select, where) - выводим поле и делаем по нему join
+obyaz_priznak (select)
+att_priznak (select)
+
+table: users_v2
+user_id (select, where)
+course_id (select)
+m2_progress (select)
+
+table: users_logs_v2
+user_id (select)
+comment (where)
+
