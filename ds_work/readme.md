@@ -33,7 +33,7 @@
 
 Кроме указанных моделей ранее тестировались **нейронные сети** (полносвязная и TabNet), однако, они продемонстрировали плохие результаты и были исключены из дальнейших экспериментов.
 
-По результатам тестирования наилучшие показатели `MAE` продемонстрировали модели **случайного леса**, которые были сериализованы в файлы `rf_model_week_1.joblib`, `rf_model_week_2.joblib`, ... , `rf_model_week_10.joblib` [saved_clf_models/project_2911/](./saved_clf_models/project_2911/).
+По результатам тестирования наилучшие показатели `MAE` продемонстрировали модели **случайного леса**, которые были сериализованы в файлы `rf_model_week_1.joblib`, `rf_model_week_2.joblib`, ... , `rf_model_week_10.joblib` [saved_models/project_2911/](saved_models/project_2911/).
 
 Обучение моделей прогнозирования вероятности успешного окончания курса проводилось по аналогичному сценарию, с особенностями:
 - решается бинарной классификации (**0** - не окончил, **1** - окончил успешно);
@@ -41,7 +41,7 @@
 
 В результате проведённого ранее эксперимента (исследование представлено в файле [zloy/project_2411_clf/success_prediction.ipynb](./ipynbs/success_prediction.ipynb)  [zloy/project_2411_clf/success_prediction.py](./ipynbs/success_prediction.py)  лучшие показатели продемонстрировали модели градиентного бустинга. 
 
-Эти модели обучены (файл [zloy/project_2911/m2_and_success_prediction.ipynb](./ipynbs/m2_and_success_prediction.ipynb) [m2_and_success_prediction.py](./ipynbs/m2_and_success_prediction.py)) на тех же выборках, что и модели прогнозирования прогресса по курс, и сериализованы в файлы `zloy/project_2911/saved_clf_models/gb_model_week_1.joblib`, `gb_model_week_2.joblib`, ... , `gb_model_week_10.joblib` [saved_clf_models/project_2911/](./saved_clf_models/project_2911/).
+Эти модели обучены (файл [zloy/project_2911/m2_and_success_prediction.ipynb](./ipynbs/m2_and_success_prediction.ipynb) [m2_and_success_prediction.py](./ipynbs/m2_and_success_prediction.py)) на тех же выборках, что и модели прогнозирования прогресса по курс, и сериализованы в файлы `zloy/project_2911/saved_clf_models/gb_model_week_1.joblib`, `gb_model_week_2.joblib`, ... , `gb_model_week_10.joblib` [saved_models/project_2911/](saved_models/project_2911/).
 
 ## Код использования обученных моделей
 
