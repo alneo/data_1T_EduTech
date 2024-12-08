@@ -42,3 +42,13 @@
 В результате проведённого ранее эксперимента (исследование представлено в файле [zloy/project_2411_clf/success_prediction.ipynb](./ipynbs/success_prediction.ipynb)  [zloy/project_2411_clf/success_prediction.py](./ipynbs/success_prediction.py)  лучшие показатели продемонстрировали модели градиентного бустинга. 
 
 Эти модели обучены (файл [zloy/project_2911/m2_and_success_prediction.ipynb](./ipynbs/m2_and_success_prediction.ipynb) [m2_and_success_prediction.py](./ipynbs/m2_and_success_prediction.py)) на тех же выборках, что и модели прогнозирования прогресса по курс, и сериализованы в файлы `zloy/project_2911/saved_clf_models/gb_model_week_1.joblib`, `gb_model_week_2.joblib`, ... , `gb_model_week_10.joblib` [saved_clf_models/project_2911/](./saved_clf_models/project_2911/).
+
+# 2. Сборка сводного обзорного датасета (Инга)
+
+[inga_overview.ipynb](./ipynbs/inga_overview.ipynb) [inga_overview.py](./ipynbs/inga_overview.py) сборка сводного обзорного датасета из файлов csv заказчика.
+
+Результатом работы скрипта является наглядная таблица типа "1 студент - 1 строка" с различными суммарными показателями по курсу. 
+
+Многие показатели в текущей работе не были задействованы, т.к. по детским курсам данные были неполные, но по взрослым картина другая. 
+
+Для кураторов эта таблица может быть полезна, и расчёт суммарного времени просмотра вебинаров пригодится в будущем.
