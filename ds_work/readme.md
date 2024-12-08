@@ -43,6 +43,12 @@
 
 Эти модели обучены (файл [zloy/project_2911/m2_and_success_prediction.ipynb](./ipynbs/m2_and_success_prediction.ipynb) [m2_and_success_prediction.py](./ipynbs/m2_and_success_prediction.py)) на тех же выборках, что и модели прогнозирования прогресса по курс, и сериализованы в файлы `zloy/project_2911/saved_clf_models/gb_model_week_1.joblib`, `gb_model_week_2.joblib`, ... , `gb_model_week_10.joblib` [saved_clf_models/project_2911/](./saved_clf_models/project_2911/).
 
+## Код использования обученных моделей
+
+* [saved_models_test.ipynb](./ipynbs/saved_models_test.ipynb) [saved_models_test.py](./ipynbs/saved_models_test.py) - прогнозирование прогресса по курсу
+[saved_clf_models_test.ipynb](./ipynbs/saved_clf_models_test.ipynb)
+* [saved_clf_models_test.py](./ipynbs/saved_clf_models_test.py) - прогнозирование вероятности успешного завершения
+
 # 2. Сборка сводного обзорного датасета (Инга)
 
 [inga_overview.ipynb](./ipynbs/inga_overview.ipynb) [inga_overview.py](./ipynbs/inga_overview.py) сборка сводного обзорного датасета из файлов csv заказчика.
