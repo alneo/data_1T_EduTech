@@ -1,0 +1,52 @@
+-- public.ds_gavrilova определение
+
+-- Drop table
+
+-- DROP TABLE public.ds_gavrilova;
+
+CREATE TABLE public.ds_gavrilova (
+                                     user_id int4 NULL,
+                                     cur_date timestamptz NULL,
+                                     time_zone int4 NULL,
+                                     age int4 NULL,
+                                     tg_bot int4 NULL,
+                                     payment int4 NULL,
+                                     course_id int4 NULL,
+                                     day_from_start numeric NULL,
+                                     day_to_finish numeric NULL,
+                                     auth_date_last_delay numeric NULL,
+                                     auth_interval numeric NULL,
+                                     exercise_rate numeric NULL,
+                                     exercise_required_rate numeric NULL,
+                                     exercise_optional_rate numeric NULL,
+                                     exercise_attestation_rate numeric NULL,
+                                     exercise_attempts_mean numeric NULL,
+                                     exercise_required_attempts_mean numeric NULL,
+                                     exercise_optional_attempts_mean numeric NULL,
+                                     exercise_attestation_attempts numeric NULL,
+                                     exercise_attempts_interval_mean numeric NULL,
+                                     exercise_required_attempts_interval_mean numeric NULL,
+                                     exercise_optional_attempts_interval_mean numeric NULL,
+                                     exercise_attestation_attempts_interval_mean numeric NULL,
+                                     exercise_result numeric NULL,
+                                     exercise_required_result numeric NULL,
+                                     exercise_optional_result numeric NULL,
+                                     exercise_attestation_result numeric NULL,
+                                     exercise_date_last_delay numeric NULL,
+                                     exercise_shown_delay_first_mean numeric NULL,
+                                     exercise_success_shown_delay_mean numeric NULL,
+                                     exercise_success_deadline_delay_mean numeric NULL,
+                                     progress numeric NULL,
+                                     view_rate numeric NULL,
+                                     view_required_rate numeric NULL,
+                                     view_optional_rate numeric NULL,
+                                     view_attestation_rate numeric NULL,
+                                     activity_views_mean numeric NULL,
+                                     activity_required_views_mean numeric NULL,
+                                     activity_optional_views_mean numeric NULL,
+                                     activity_attestation_views_mean numeric NULL,
+                                     activity_view_date_last_delay numeric NULL,
+                                     activity_views_interval numeric NULL,
+                                     activity_view_shown_delay_first_mean numeric NULL,
+                                     target int4 NULL
+);
